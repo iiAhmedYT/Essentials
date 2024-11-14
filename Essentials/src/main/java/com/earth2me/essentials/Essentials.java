@@ -902,8 +902,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 return true;
             } catch (final NotEnoughArgumentsException ex) {
                 if (getSettings().isVerboseCommandUsages() && !cmd.getUsageStrings().isEmpty()) {
+                    final boolean isEssCommand = command instanceof PluginIdentifiableCommand && ((PluginIdentifiableCommand) command).getPlugin().equals(this);
                     sender.sendTl("commandHelpLine1", commandLabel);
-                    sender.sendTl("commandHelpLine2", command.getDescription());
+                    sender.sendTl("commandHelpLine2", isEssCommand ? sender.tl(command.getName() + "CommandDescription") : command.getDescription());
                     sender.sendTl("commandHelpLine3");
                     for (Map.Entry<String, String> usage : cmd.getUsageStrings().entrySet()) {
                         sender.sendTl("commandHelpLineUsage", AdventureUtil.parsed(usage.getKey().replace("<command>", commandLabel)), AdventureUtil.parsed(usage.getValue()));

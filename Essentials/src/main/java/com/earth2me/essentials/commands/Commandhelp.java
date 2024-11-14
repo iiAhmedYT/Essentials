@@ -37,18 +37,19 @@ public class Commandhelp extends EssentialsCommand {
                 final String cmd = pageStr.substring(1);
                 for (final Map.Entry<String, Command> knownCmd : ess.getKnownCommandsProvider().getKnownCommands().entrySet()) {
                     if (knownCmd.getKey().equalsIgnoreCase(cmd)) {
+                        final Command bukkit = knownCmd.getValue();
+                        final boolean isEssCommand = bukkit instanceof PluginIdentifiableCommand && ((PluginIdentifiableCommand) bukkit).getPlugin().equals(ess);
                         user.sendTl("commandHelpLine1", cmd);
-                        user.sendTl("commandHelpLine2", knownCmd.getValue().getDescription());
-                        user.sendTl("commandHelpLine4", knownCmd.getValue().getAliases().toString());
+                        user.sendTl("commandHelpLine2", isEssCommand ? user.playerTl(bukkit.getName() + "CommandDescription") : bukkit.getDescription());
+                        user.sendTl("commandHelpLine4", bukkit.getAliases().toString());
                         user.sendTl("commandHelpLine3");
-                        final boolean isEssCommand = knownCmd.getValue() instanceof PluginIdentifiableCommand && ((PluginIdentifiableCommand) knownCmd.getValue()).getPlugin().equals(ess);
-                        final IEssentialsCommand essCommand = isEssCommand ? ess.getCommandMap().get(knownCmd.getValue().getName()) : null;
+                        final IEssentialsCommand essCommand = isEssCommand ? ess.getCommandMap().get(bukkit.getName()) : null;
                         if (essCommand != null && !essCommand.getUsageStrings().isEmpty()) {
                             for (Map.Entry<String, String> usage : essCommand.getUsageStrings().entrySet()) {
                                 user.sendTl("commandHelpLineUsage", AdventureUtil.parsed(usage.getKey().replace("<command>", cmd)), AdventureUtil.parsed(usage.getValue()));
                             }
                         } else {
-                            user.sendMessage(knownCmd.getValue().getUsage());
+                            user.sendMessage(bukkit.getUsage());
                         }
                         return;
                     }
