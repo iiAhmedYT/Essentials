@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
 
 public class Commandhelp extends EssentialsCommand {
     public Commandhelp() {
@@ -41,7 +42,13 @@ public class Commandhelp extends EssentialsCommand {
                         final boolean isEssCommand = bukkit instanceof PluginIdentifiableCommand && ((PluginIdentifiableCommand) bukkit).getPlugin().equals(ess);
                         final IEssentialsCommand essCommand = isEssCommand ? ess.getCommandMap().get(bukkit.getName()) : null;
                         user.sendTl("commandHelpLine1", cmd);
-                        user.sendTl("commandHelpLine2", essCommand == null ? bukkit.getDescription() : user.playerTl(bukkit.getName() + "CommandDescription"));
+                        String description = bukkit.getDescription();
+                        if (essCommand != null) {
+                            try {
+                                description = user.playerTl(bukkit.getName() + "CommandDescription");
+                            } catch (MissingResourceException ignored) {}
+                        }
+                        user.sendTl("commandHelpLine2", description);
                         user.sendTl("commandHelpLine4", bukkit.getAliases().toString());
                         user.sendTl("commandHelpLine3");
                         if (essCommand != null && !essCommand.getUsageStrings().isEmpty()) {
