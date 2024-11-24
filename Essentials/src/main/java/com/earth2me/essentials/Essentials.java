@@ -146,16 +146,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -906,8 +897,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     String description = command.getDescription();
                     try {
                         description = sender.tl(command.getName() + "CommandDescription");
-                    } catch (MissingResourceException ignored) {
-                    }
+                    } catch (MissingResourceException ignored) {}
                     sender.sendTl("commandHelpLine2", description);
                     sender.sendTl("commandHelpLine3");
                     for (Map.Entry<String, String> usage : cmd.getUsageStrings().entrySet()) {
